@@ -1,6 +1,7 @@
 package com.codecool.hangman;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class Hangman {
 
@@ -11,8 +12,10 @@ public class Hangman {
         int lives = 6; // =selectDifficulty(); lives legalabb 3-7 skalan mozogjon
         String word="Codecool"; //le kell cserelni a randomCountry(Countries.getAll()) fuggvenyre, egyelore tesztelesre maradhat fix
 
+
         int difficulty = selectDifficulty();
-        setDifficulty(difficulty, word, lives);
+        String[] arrayDiff = setDifficulty(difficulty);
+        // System.out.println(arrayDiff[0] + arrayDiff[1]);
 
         play(word, lives = 6);
     }
@@ -22,18 +25,44 @@ public class Hangman {
 
     }
     private static int selectDifficulty(){
-        int difficulty = 1;
-        //kiirni a nehezsegi szinteket 1-easy, 2-medium, 3-hard  vagy vmi ilyesmi
-        //bekerni egyet
+        System.out.println("Please select difficulty! (1-3)");
+        System.out.println("1 - Easy");
+        System.out.println("2 - Medium");
+        System.out.println("3 - Hard");
+
+        int difficulty = 0;
+        boolean flag = true;
+        Scanner scanner = new Scanner(System.in);
+
+        while (flag) {
+            difficulty = scanner.nextInt();
+
+            if (difficulty > 0 && difficulty <= 3) {
+                flag = false;
+                }
+            }
         return difficulty;
     }
 
     //erre ha van jobb otletetek mondjatok
-    private static void setDifficulty(int difficulty, String word, int lives){
-        //a selectDifficulty szerint beallitjuk a nehezseget: beallitja az eletet es az orszagokat
+    private static String[] setDifficulty(int difficulty){
+        //a selectDifficulty szerint beallitjuk a nehezseget: beallitja az eletet es az orszagokat//
+        String strLives = "";
+        switch (difficulty) {
+            case 1: strLives = "7";
+                break;
+            case 2: strLives = "5";
+                break;
+            case 3: strLives = "3";
+                break;
+            default: selectDifficulty();
+        }
+        System.out.println(strLives);
 
+        // word = randomCountry(difficulty, Countries.getAllCountries());
+        String word = "Macska";
 
-        word = randomCountry(difficulty, Countries.getAllCountries());
+        return new String[] {word, strLives};
     }
     private static String randomCountry(int difficulty, List<String> countries){
         String country="";
