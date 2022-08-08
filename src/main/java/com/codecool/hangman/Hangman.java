@@ -1,5 +1,6 @@
 package com.codecool.hangman;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,15 +10,18 @@ public class Hangman {
         //nezd meg a ./sharedStuffs/hangman_flowchart_grou4.drawio fajlt https://app.diagrams.net
         //a feladataleiras miatt az eletet itt kell beallitani,
         //ugyhogy itt kell meghivni a selectDifficulty fuggvenyt.
-        int lives = 6; // =selectDifficulty(); lives legalabb 3-7 skalan mozogjon
-        String word="Codecool"; //le kell cserelni a randomCountry(Countries.getAll()) fuggvenyre, egyelore tesztelesre maradhat fix
 
-
+        System.out.println("=======================");
+        System.out.println("||      HANGMAN      ||");
+        System.out.println("=======================");
         int difficulty = selectDifficulty();
         String[] arrayDiff = setDifficulty(difficulty);
-        // System.out.println(arrayDiff[0] + arrayDiff[1]);
+        play(arrayDiff[0], Integer.parseInt(arrayDiff[1]));
 
-        play(word, lives = 6);
+        //ha a fo programreszt akarnank tesztelni, elore megadott parameterekkel
+        //int lives = 6;
+        //String word="Codecool";
+        //play(word, lives);
     }
 
     private static void play(String word, int lives) {
@@ -25,7 +29,7 @@ public class Hangman {
 
     }
     private static int selectDifficulty(){
-        System.out.println("Please select difficulty! (1-3)");
+        System.out.println("Please select difficulty!");
         System.out.println("1 - Easy");
         System.out.println("2 - Medium");
         System.out.println("3 - Hard");
@@ -33,18 +37,18 @@ public class Hangman {
         int difficulty = 0;
         boolean flag = true;
         Scanner scanner = new Scanner(System.in);
-
         while (flag) {
-            difficulty = scanner.nextInt();
-
-            if (difficulty > 0 && difficulty <= 3) {
-                flag = false;
+            if(scanner.hasNextInt()) { //a betuket es tortszamokat meg nem vedi ki, de az entert igen...
+                difficulty = scanner.nextInt();
+                if (difficulty > 0 && difficulty <= 3) {
+                    flag = false;
                 }
             }
+        }
+        scanner.close();
         return difficulty;
     }
 
-    //erre ha van jobb otletetek mondjatok
     private static String[] setDifficulty(int difficulty){
         //a selectDifficulty szerint beallitjuk a nehezseget: beallitja az eletet es az orszagokat//
         String strLives = "";
