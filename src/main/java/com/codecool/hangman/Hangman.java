@@ -1,6 +1,7 @@
 package com.codecool.hangman;
 
 import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,8 +26,37 @@ public class Hangman {
     }
 
     private static void play(String word, int lives) {
-        // TODO Implement the game here!
+        char[] charArray = word.toCharArray();
+        char[] wordState = new char[word.length()];
+        char[] userInputArr = new char[1];
+        String input;
+        char userInput;
 
+        for (int i = 0; i < charArray.length; i++) {
+            wordState[i] = '_';
+        }
+        do {
+            for (int i = 0; i < charArray.length; i++) {
+                System.out.print(wordState[i] + " ");
+            }
+            System.out.println();
+            Scanner scanner = new Scanner(System.in);
+            input = scanner.nextLine();
+            if (input.equals("quit")) { // Maybe put into a function later
+                // STOP PROGRAM
+            } else if(input.length() == 1) {
+                userInputArr = input.toCharArray();
+                userInput = userInputArr[0];
+
+                for (int i = 0; i < charArray.length; i++) {
+                    if (Character.toLowerCase(userInput) == Character.toLowerCase(charArray[i])) {
+                        wordState[i] = charArray[i];
+                    }
+                }
+            } else {
+                System.out.println("Please input a single character");
+            }
+        } while (!input.equals("quit"));
     }
     private static int selectDifficulty(){
         System.out.println("Please select difficulty!");
@@ -45,7 +75,6 @@ public class Hangman {
                 }
             }
         }
-        scanner.close();
         return difficulty;
     }
 
