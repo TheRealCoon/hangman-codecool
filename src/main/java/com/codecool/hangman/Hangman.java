@@ -56,7 +56,7 @@ public class Hangman {
             } else {
                 System.out.println("Please input a single character");
             }
-        } while (!input.equals("quit"));
+        } while (!(input.equals("quit") || Arrays.equals(charArray,wordState)));
     }
     private static int selectDifficulty(){
         System.out.println("Please select difficulty!");
