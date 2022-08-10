@@ -18,10 +18,10 @@ public class Hangman {
         System.out.println("=======================");
         int difficulty = selectDifficulty();
         String[] arrayDiff = setDifficulty(difficulty);
-        play(arrayDiff[0], Integer.parseInt(arrayDiff[1]));
+        play(arrayDiff[0], Integer.parseInt(arrayDiff[1]), difficulty);
     }
 
-    private static void play(String word, int lives) {
+    private static void play(String word, int lives, int difficulty) {
         System.out.println("You have " + lives + " lives");
         char[] charArray = word.toCharArray();
         char[] wordState = new char[word.length()];
@@ -66,13 +66,13 @@ public class Hangman {
             }
             if (!isRepeatedLetter && !isInWord) {
                 lives--;
-                // ASCII art++
             }
+            printAscii(lives, difficulty);
             if (lives == 0) {
                 System.out.println("Game over :(");
             }
             System.out.println("You have " + lives + " lives");
-            // SOUT(ASCII art)
+
 
         } while (!(input.equals("quit") || Arrays.equals(charArray, wordState)));
         System.out.println( " ____________________\n" +
@@ -113,6 +113,7 @@ public class Hangman {
 
     private static String[] setDifficulty(int difficulty) {
         //a selectDifficulty szerint beallitjuk a nehezseget: beallitja az eletet es az orszagokat//
+        String word;
         String strLives = "";
         switch (difficulty) {
             case 1:
@@ -129,16 +130,93 @@ public class Hangman {
         }
         System.out.println(strLives);
 
-        // word = randomCountry(difficulty, Countries.getAllCountries());
-        String word = "Macska";
+        word = randomCountry(difficulty, Countries.getAllCountries());
+        // String word = "Macska";
 
         return new String[]{word, strLives};
     }
 
     private static String randomCountry(int difficulty, List<String> countries) {
         String country = "";
-        // itt jön egy algoritmus ami a difficulty szerint kivalogat egy listat az osszes orszag listajabol,
-        //aztan visszadob egy randomot
+        switch (difficulty) {
+            case 1: ;
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+        double randomIndex = Math.random()*countries.size()-1;
+        country = countries.get((int)randomIndex);
         return country;
+    }
+
+    public static void printAscii(int lives, int difficulty) {
+        String[] asciiArr = new String[7];
+        asciiArr[0] =   "    _ _\n" +
+                        "   |  |\n" +
+                        "   |  0\n" +
+                        "   | \\|/\n" +
+                        "   |  |\n" +
+                        "   | / \\\n" +
+                        "_ _| ";
+
+        asciiArr[1] =   "    _ _\n" +
+                        "   |  |\n" +
+                        "   |  0\n" +
+                        "   | \\|/\n" +
+                        "   |  |\n" +
+                        "   |  \n" +
+                        "_ _| ";
+
+        asciiArr[2] =   "    _ _\n" +
+                        "   |  |\n" +
+                        "   |  0\n" +
+                        "   | \\|/\n" +
+                        "   |  \n" +
+                        "   |  \n" +
+                        "_ _| ";
+
+        asciiArr[3] =   "    _ _\n" +
+                        "   |  |\n" +
+                        "   |  0\n" +
+                        "   | \n" +
+                        "   |  \n" +
+                        "   |  \n" +
+                        "_ _| ";
+
+        asciiArr[4] =   "    _ _\n" +
+                        "   | \n" +
+                        "   | \n" +
+                        "   | \n" +
+                        "   | \n" +
+                        "   | \n" +
+                        "_ _| ";
+
+        asciiArr[5] = "   \n" +
+                "    \n" +
+                "    \n" +
+                "    \n" +
+                "   |\n" +
+                "   |  \n" +
+                "_ _|";
+
+        asciiArr[6] = "   \n" +
+                "    \n" +
+                "    \n" +
+                "    \n" +
+                "    \n" +
+                "_ _|";
+
+        switch (difficulty) {
+            case 1: // EASY - 7
+                System.out.println(asciiArr[lives]);
+                break;
+            case 2: // MEDIUM - 5
+                System.out.println(asciiArr[Math.round((float)(lives*6/5))]);
+                break;
+            case 3: // HARD - 3
+                System.out.println(asciiArr[lives*2]);
+        }
     }
 }
