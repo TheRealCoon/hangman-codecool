@@ -19,75 +19,132 @@ public class Hangman {
 
     private static void play(String word, int lives, int difficulty) {
         System.out.println("You have " + lives + " lives");
-        char[] charArray = word.toCharArray();
+        char[] wordAsCharArray = word.toCharArray();
         char[] wordState = new char[word.length()];
-        char[] userInputArr;
         String input;
         char userInput;
         ArrayList<Character> usedLetters = new ArrayList<>();
         boolean isRepeatedLetter = false;
         boolean isInWord = false;
 
-        for (int i = 0; i < charArray.length; i++) {
-            wordState[i] = '_';
-        }
-        do {
-            for (int i = 0; i < charArray.length; i++) {
-                System.out.print(wordState[i] + " ");
+        fillUpWordState(wordAsCharArray, wordState);
+            do {
+                displayWordState(wordAsCharArray, wordState);
+                Scanner scanner = new Scanner(System.in);
+                input = scanner.nextLine();
+                quitProgram(input.equals("quit"));
+                if (isValidChar(input.charAt(0))) {
+                    userInput = input.toLowerCase().charAt(0);
+                    isRepeatedLetter = CheckIfRepeatedLetter(userInput, usedLetters);
+                    isInWord = CheckIfInWord(wordAsCharArray, wordState, userInput);
+                } else System.out.println("Please input a single character");
+                if (!isRepeatedLetter && !isInWord ) lives--;
+                printAscii(lives, difficulty);
+                System.out.println("You have " + lives + " lives");
+            } while (!Arrays.equals(wordAsCharArray, wordState) && lives != 0);
+        System.out.printf("The world was \"%s\".\n",word);
+            if (lives == 0) System.out.println("Game over :(");
+        if(Arrays.equals(wordAsCharArray, wordState)){
+                printWin(word);
             }
-            System.out.println();
-            Scanner scanner = new Scanner(System.in);
-            input = scanner.nextLine();
-            if (input.equals("quit")) { // Maybe put into a function later
-                // STOP PROGRAM
-            } else if (input.length() == 1) {
-                userInputArr = input.toCharArray();
-                userInput = userInputArr[0];
-                if (!usedLetters.contains(Character.toLowerCase(userInput))) {
-                    usedLetters.add(Character.toLowerCase(userInput));
-                    isRepeatedLetter = false;
-                } else {
-                    isRepeatedLetter = true;
-                    System.out.println("Letters already used " + usedLetters);
-                }
-                isInWord = false;
-                for (int i = 0; i < charArray.length; i++) {
-                    if (Character.toLowerCase(userInput) == Character.toLowerCase(charArray[i])) {
-                        wordState[i] = charArray[i];
-                        isInWord = true;
-                    }
-                }
-            } else {
-                System.out.println("Please input a single character");
-            }
-            if (!isRepeatedLetter && !isInWord) {
-                lives--;
-            }
-            printAscii(lives, difficulty);
-            if (lives == 0) {
-                System.out.println("Game over :(");
-            }
-            System.out.println("You have " + lives + " lives");
-
-
-        } while (!(input.equals("quit") || Arrays.equals(charArray, wordState)));
-        printWin(word);
+        askForNewGame();
     }
-    private static void printWin(String word){
-        System.out.println("The word was " + word);
+
+    private static void askForNewGame() {
+        System.out.println("Do you want to continue playing?");
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine();
+        switch (answer.toLowerCase()) {
+            case "y":
+                main(new String[]{});
+                break;
+            case "n":
+                quitProgram(true);
+                break;
+            default:
+                System.out.println("Answer y or n!");
+                askForNewGame();
+        }
+    }
+
+    private static void quitProgram(boolean wantToQuit) {
+        if (wantToQuit) {
+            System.out.println("Good bye!");
+            System.exit(0);
+        }
+    }
+
+    private static boolean CheckIfRepeatedLetter(char userInput, ArrayList<Character> usedLetters) {
+        boolean isRepeatedLetter;
+        if (!usedLetters.contains(userInput)) {
+            usedLetters.add(userInput);
+            isRepeatedLetter = false;
+        } else {
+            isRepeatedLetter = true;
+            System.out.println("Letters already used " + usedLetters);
+        }
+        return isRepeatedLetter;
+    }
+
+    private static boolean CheckIfInWord(char[] wordAsCharArray, char[] wordState, char userInput) {
+        boolean isInWord = false;
+        for (int i = 0; i < wordAsCharArray.length; i++) {
+            if (userInput == Character.toLowerCase(wordAsCharArray[i])) {
+                wordState[i] = wordAsCharArray[i];
+                isInWord = true;
+            }
+        }
+        return isInWord;
+    }
+
+    private static void displayWordState(char[] wordAsCharArray, char[] wordState) {
+        for (int i = 0; i < wordAsCharArray.length; i++) {
+            System.out.print(wordState[i] + " ");
+        }
         System.out.println();
-        System.out.println( "   ___________________________\n" +
-                            "  |                           |\n" +
-                            "  |       CONGRATULATIONS!    |\n" +
-                            "  |_______                ____|\n" +
-                            "          \\  YOU ROCK!  /\n" +
-                            "           \\_________  /\n" +
-                            "          /\\  /\\     \\/\n" +
-                            "         /  \\/  \\  /\\\n" +
-                            "   /\\  /         \\/  \\\n" +
-                            "  /  \\/    O   O      \\\n" +
-                            " /            ^        \\\n" +
-                            "/          \\_____/      \\");
+    }
+
+    private static void fillUpWordState(char[] wordAsCharArray, char[] wordState) {
+        for (int i = 0; i < wordAsCharArray.length; i++) {
+            switch (wordAsCharArray[i]) {
+                case ' ':
+                    wordState[i] = ' ';
+                    break;
+                case '-':
+                    wordState[i] = '-';
+                    break;
+                default:
+                    wordState[i] = '_';
+            }
+        }
+    }
+
+    private static boolean isValidChar(char letter) {
+        char[] englishAlphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
+                'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+                'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        for (char character : englishAlphabet) {
+            if (Character.toLowerCase(letter) == character) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void printWin(String word) {
+        System.out.println();
+        System.out.println("   ___________________________\n" +
+                "  |                           |\n" +
+                "  |       CONGRATULATIONS!    |\n" +
+                "  |_______                ____|\n" +
+                "          \\  YOU ROCK!  /\n" +
+                "           \\_________  /\n" +
+                "          /\\  /\\     \\/\n" +
+                "         /  \\/  \\  /\\\n" +
+                "   /\\  /         \\/  \\\n" +
+                "  /  \\/    O   O      \\\n" +
+                " /            ^        \\\n" +
+                "/          \\_____/      \\");
         System.out.println();
     }
 
@@ -96,17 +153,24 @@ public class Hangman {
         System.out.println("1 - Easy");
         System.out.println("2 - Medium");
         System.out.println("3 - Hard");
-
+        System.out.println("Type \"quit\" to quit.");
         int difficulty = 0;
+        String input;
         boolean flag = true;
         Scanner scanner = new Scanner(System.in);
         while (flag) {
-            if (scanner.hasNextInt()) { //a betuket es tortszamokat meg nem vedi ki, de az entert igen...
-                difficulty = scanner.nextInt();
+                input = scanner.nextLine();
+                quitProgram(input.equals("quit"));
+                try {
+                    difficulty = Integer.parseInt(input);
+                }catch (Exception e){
+                    System.out.println("Wrong input!");
+                }
                 if (difficulty > 0 && difficulty <= 3) {
                     flag = false;
+                }else{
+                    System.out.println("Wrong input!");
                 }
-            }
         }
         return difficulty;
     }
@@ -128,11 +192,7 @@ public class Hangman {
             default:
                 selectDifficulty();
         }
-        System.out.println(strLives);
-
-        //word = randomCountry(difficulty, Countries.getAllCountries());
-        word = "Macska";
-
+        word = randomCountry(difficulty, Countries.getAllCountries());
         return new String[]{word, strLives};
     }
 
@@ -172,65 +232,71 @@ public class Hangman {
     }
 
     public static void printAscii(int lives, int difficulty) {
-        String[] asciiArr = new String[7];
-        asciiArr[0] = "    _ _\n" +
+        String[] asciiArr = new String[8];
+        asciiArr[0] = "    ___\n" +
                 "   |  |\n" +
                 "   |  0\n" +
                 "   | \\|/\n" +
                 "   |  |\n" +
                 "   | / \\\n" +
-                "_ _| ";
+                "___| ";
 
-        asciiArr[1] = "    _ _\n" +
+        asciiArr[1] = "    ___\n" +
                 "   |  |\n" +
                 "   |  0\n" +
                 "   | \\|/\n" +
                 "   |  |\n" +
                 "   |  \n" +
-                "_ _| ";
+                "___| ";
 
-        asciiArr[2] = "    _ _\n" +
+        asciiArr[2] = "    ___\n" +
                 "   |  |\n" +
                 "   |  0\n" +
                 "   | \\|/\n" +
                 "   |  \n" +
                 "   |  \n" +
-                "_ _| ";
+                "___| ";
 
-        asciiArr[3] = "    _ _\n" +
+        asciiArr[3] = "    ___\n" +
                 "   |  |\n" +
                 "   |  0\n" +
                 "   | \n" +
                 "   |  \n" +
                 "   |  \n" +
-                "_ _| ";
+                "___| ";
 
-        asciiArr[4] = "    _ _\n" +
+        asciiArr[4] = "    ___\n" +
                 "   | \n" +
                 "   | \n" +
                 "   | \n" +
                 "   | \n" +
                 "   | \n" +
-                "_ _| ";
+                "___| ";
 
         asciiArr[5] = "   \n" +
-                "    \n" +
-                "    \n" +
-                "    \n" +
+                "   |\n" +
+                "   |\n" +
+                "   |\n" +
                 "   |\n" +
                 "   |  \n" +
-                "_ _|";
+                "___|";
 
         asciiArr[6] = "   \n" +
                 "    \n" +
                 "    \n" +
                 "    \n" +
                 "    \n" +
-                "_ _|";
+                "___|";
+        asciiArr[7] = "   \n" +
+                "    \n" +
+                "    \n" +
+                "    \n" +
+                "    \n" +
+                "____";
         if (lives >= 0) {
             switch (difficulty) {
                 case 1: // EASY - 7
-                    System.out.println(asciiArr[lives-1]);
+                    System.out.println(asciiArr[lives]);
                     break;
                 case 2: // MEDIUM - 5
                     System.out.println(asciiArr[Math.round((float) (lives * 6 / 5))]);
