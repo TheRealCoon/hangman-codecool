@@ -1,6 +1,5 @@
 package com.codecool.hangman;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,9 +9,6 @@ public class Hangman {
 
     public static void main(String[] args) {
         //nezd meg a ./sharedStuffs/hangman_flowchart_grou4.drawio fajlt https://app.diagrams.net
-        //a feladataleiras miatt az eletet itt kell beallitani,
-        //ugyhogy itt kell meghivni a selectDifficulty fuggvenyt.
-
         System.out.println("=======================");
         System.out.println("||      HANGMAN      ||");
         System.out.println("=======================");
@@ -75,20 +71,24 @@ public class Hangman {
 
 
         } while (!(input.equals("quit") || Arrays.equals(charArray, wordState)));
-        System.out.println( " ____________________\n" +
-                            "|                               |\n" +
-                            "| CONGRATULATIONS!   | \n" +
-                            "|__ ____|\n" +
-                            "     \\  YOU ROCK!  /\n" +
-                            "      \\__________  /\n" +
-                            "           /\\   /\\         \\/\n" +
-                            "         /   \\/   \\    /\\\n" +
-                            "   /\\  /           \\/   \\\n" +
-                            "  /  \\/   O   O        \\\n" +
-                            " /           ^             \\\n" +
-                            "/       \\____ /          \\");
-        System.out.println();
+        printWin(word);
+    }
+    private static void printWin(String word){
         System.out.println("The word was " + word);
+        System.out.println();
+        System.out.println( "   ___________________________\n" +
+                            "  |                           |\n" +
+                            "  |       CONGRATULATIONS!    |\n" +
+                            "  |_______                ____|\n" +
+                            "          \\  YOU ROCK!  /\n" +
+                            "           \\_________  /\n" +
+                            "          /\\  /\\     \\/\n" +
+                            "         /  \\/  \\  /\\\n" +
+                            "   /\\  /         \\/  \\\n" +
+                            "  /  \\/    O   O      \\\n" +
+                            " /            ^        \\\n" +
+                            "/          \\_____/      \\");
+        System.out.println();
     }
 
     private static int selectDifficulty() {
@@ -130,68 +130,88 @@ public class Hangman {
         }
         System.out.println(strLives);
 
-        word = randomCountry(difficulty, Countries.getAllCountries());
-        // String word = "Macska";
+        //word = randomCountry(difficulty, Countries.getAllCountries());
+        word = "Macska";
 
         return new String[]{word, strLives};
     }
 
     private static String randomCountry(int difficulty, List<String> countries) {
         String country = "";
+        List<String> countriesSortedByLength;
+        int minWordLength = 1;
+        int maxWordLength = 2;
         switch (difficulty) {
-            case 1: ;
+            case 1:
+                minWordLength = 1;
+                maxWordLength = 6;
                 break;
             case 2:
+                minWordLength = 7;
+                maxWordLength = 10;
                 break;
             case 3:
+                minWordLength = 11;
+                maxWordLength = 30;
                 break;
         }
-        double randomIndex = Math.random()*countries.size()-1;
-        country = countries.get((int)randomIndex);
+        countriesSortedByLength = getCountryListByDifficulty(minWordLength, maxWordLength, countries);
+        double randomIndex = Math.random() * countriesSortedByLength.size();
+        country = countriesSortedByLength.get((int) randomIndex);
         return country;
+    }
+
+    private static List<String> getCountryListByDifficulty(int minWordLength, int maxWordLength, List<String> countries) {
+        List<String> resultList = new ArrayList<>();
+        for (String country : countries) {
+            if (country.length() >= minWordLength && country.length() <= maxWordLength) {
+                resultList.add(country);
+            }
+        }
+        return resultList;
     }
 
     public static void printAscii(int lives, int difficulty) {
         String[] asciiArr = new String[7];
-        asciiArr[0] =   "    _ _\n" +
-                        "   |  |\n" +
-                        "   |  0\n" +
-                        "   | \\|/\n" +
-                        "   |  |\n" +
-                        "   | / \\\n" +
-                        "_ _| ";
+        asciiArr[0] = "    _ _\n" +
+                "   |  |\n" +
+                "   |  0\n" +
+                "   | \\|/\n" +
+                "   |  |\n" +
+                "   | / \\\n" +
+                "_ _| ";
 
-        asciiArr[1] =   "    _ _\n" +
-                        "   |  |\n" +
-                        "   |  0\n" +
-                        "   | \\|/\n" +
-                        "   |  |\n" +
-                        "   |  \n" +
-                        "_ _| ";
+        asciiArr[1] = "    _ _\n" +
+                "   |  |\n" +
+                "   |  0\n" +
+                "   | \\|/\n" +
+                "   |  |\n" +
+                "   |  \n" +
+                "_ _| ";
 
-        asciiArr[2] =   "    _ _\n" +
-                        "   |  |\n" +
-                        "   |  0\n" +
-                        "   | \\|/\n" +
-                        "   |  \n" +
-                        "   |  \n" +
-                        "_ _| ";
+        asciiArr[2] = "    _ _\n" +
+                "   |  |\n" +
+                "   |  0\n" +
+                "   | \\|/\n" +
+                "   |  \n" +
+                "   |  \n" +
+                "_ _| ";
 
-        asciiArr[3] =   "    _ _\n" +
-                        "   |  |\n" +
-                        "   |  0\n" +
-                        "   | \n" +
-                        "   |  \n" +
-                        "   |  \n" +
-                        "_ _| ";
+        asciiArr[3] = "    _ _\n" +
+                "   |  |\n" +
+                "   |  0\n" +
+                "   | \n" +
+                "   |  \n" +
+                "   |  \n" +
+                "_ _| ";
 
-        asciiArr[4] =   "    _ _\n" +
-                        "   | \n" +
-                        "   | \n" +
-                        "   | \n" +
-                        "   | \n" +
-                        "   | \n" +
-                        "_ _| ";
+        asciiArr[4] = "    _ _\n" +
+                "   | \n" +
+                "   | \n" +
+                "   | \n" +
+                "   | \n" +
+                "   | \n" +
+                "_ _| ";
 
         asciiArr[5] = "   \n" +
                 "    \n" +
@@ -207,16 +227,17 @@ public class Hangman {
                 "    \n" +
                 "    \n" +
                 "_ _|";
-
-        switch (difficulty) {
-            case 1: // EASY - 7
-                System.out.println(asciiArr[lives]);
-                break;
-            case 2: // MEDIUM - 5
-                System.out.println(asciiArr[Math.round((float)(lives*6/5))]);
-                break;
-            case 3: // HARD - 3
-                System.out.println(asciiArr[lives*2]);
+        if (lives >= 0) {
+            switch (difficulty) {
+                case 1: // EASY - 7
+                    System.out.println(asciiArr[lives-1]);
+                    break;
+                case 2: // MEDIUM - 5
+                    System.out.println(asciiArr[Math.round((float) (lives * 6 / 5))]);
+                    break;
+                case 3: // HARD - 3
+                    System.out.println(asciiArr[lives * 2]);
+            }
         }
     }
 }
