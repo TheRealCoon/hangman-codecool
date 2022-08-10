@@ -75,7 +75,19 @@ public class Hangman {
             // SOUT(ASCII art)
 
         } while (!(input.equals("quit") || Arrays.equals(charArray, wordState)));
-        System.out.println("You guessed the word!");
+        System.out.println( " ____________________\n" +
+                            "|                               |\n" +
+                            "| CONGRATULATIONS!   | \n" +
+                            "|__ ____|\n" +
+                            "     \\  YOU ROCK!  /\n" +
+                            "      \\__________  /\n" +
+                            "           /\\   /\\         \\/\n" +
+                            "         /   \\/   \\    /\\\n" +
+                            "   /\\  /           \\/   \\\n" +
+                            "  /  \\/   O   O        \\\n" +
+                            " /           ^             \\\n" +
+                            "/       \\____ /          \\");
+        System.out.println();
         System.out.println("The word was " + word);
     }
 
