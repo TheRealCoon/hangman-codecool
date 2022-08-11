@@ -8,7 +8,6 @@ import java.util.Scanner;
 public class Hangman {
 
     public static void main(String[] args) {
-        //nezd meg a ./sharedStuffs/hangman_flowchart_grou4.drawio fajlt https://app.diagrams.net
         System.out.println("=======================");
         System.out.println("||      HANGMAN      ||");
         System.out.println("=======================");
@@ -176,7 +175,6 @@ public class Hangman {
     }
 
     private static String[] setDifficulty(int difficulty) {
-        //a selectDifficulty szerint beallitjuk a nehezseget: beallitja az eletet es az orszagokat//
         String word;
         String strLives = "";
         switch (difficulty) {
