@@ -32,7 +32,7 @@ public class Hangman {
                 Scanner scanner = new Scanner(System.in);
                 input = scanner.nextLine();
                 quitProgram(input.equals("quit"));
-                if (isValidChar(input.charAt(0))) {
+                if (!input.isBlank() && isValidChar(input.charAt(0))) {
                     userInput = input.toLowerCase().charAt(0);
                     isRepeatedLetter = CheckIfRepeatedLetter(userInput, usedLetters);
                     isInWord = CheckIfInWord(wordAsCharArray, wordState, userInput);
