@@ -42,7 +42,7 @@ public class Hangman {
                 printAscii(lives, difficulty);
                 System.out.println("You have " + lives + " lives");
             } while (!Arrays.equals(wordAsCharArray, wordState) && lives != 0);
-        System.out.printf("The world was \"%s\".\n",word);
+        System.out.printf("The word was \"%s\".\n",word);
             if (lives == 0) System.out.println("Game over :(");
         if(Arrays.equals(wordAsCharArray, wordState)){
                 printWin(word);
@@ -168,9 +168,8 @@ public class Hangman {
                 }
                 if (difficulty > 0 && difficulty <= 3) {
                     flag = false;
-                }else{
-                    System.out.println("Wrong input!");
                 }
+
         }
         return difficulty;
     }
